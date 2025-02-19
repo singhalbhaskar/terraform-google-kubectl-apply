@@ -16,10 +16,6 @@
 
 terraform {
   required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "> 5.0"
-    }
     kubectl = {
       source  = "gavinbunney/kubectl"
       version = ">= 1.7.0"
@@ -28,10 +24,19 @@ terraform {
       source  = "hashicorp/http"
       version = "~> 3.0"
     }
+    google = {
+      source  = "hashicorp/google"
+      version = ">= 4.83.0, < 7"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = ">= 4.83.0, < 7"
+    }
+
   }
 
   provider_meta "google" {
-    module_name = "blueprints/terraform/hpc-toolkit:kubectl-apply/v1.37.2"
+    module_name = "blueprints/terraform/terraform-google-kubectl-apply/v0.0.1"
   }
 
   required_version = ">= 1.3"

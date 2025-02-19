@@ -52,8 +52,11 @@ Functional examples are included in the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| bucket\_name | The name of the bucket to create | `string` | n/a | yes |
-| project\_id | The project ID to deploy to | `string` | n/a | yes |
+| apply\_manifests | A list of manifests to apply to GKE cluster using kubectl. For more details see [kubectl module's inputs](kubectl/README.md). | <pre>list(object({<br>    content           = optional(string, null)<br>    source            = optional(string, null)<br>    template_vars     = optional(map(any), null)<br>    server_side_apply = optional(bool, false)<br>    wait_for_rollout  = optional(bool, true)<br>  }))</pre> | `[]` | no |
+| cluster\_id | An identifier for the gke cluster resource with format projects/<project\_id>/locations/<region>/clusters/<name>. | `string` | n/a | yes |
+| jobset | Install [Jobset](https://github.com/kubernetes-sigs/jobset) which manages a group of K8s [jobs](https://kubernetes.io/docs/concepts/workloads/controllers/job/) as a unit. | <pre>object({<br>    install = optional(bool, false)<br>    version = optional(string, "v0.5.2")<br>  })</pre> | `{}` | no |
+| kueue | Install and configure [Kueue](https://kueue.sigs.k8s.io/docs/overview/) workload scheduler. A configuration yaml/template file can be provided with config\_path to be applied right after kueue installation. If a template file provided, its variables can be set to config\_template\_vars. | <pre>object({<br>    install              = optional(bool, false)<br>    version              = optional(string, "v0.8.1")<br>    config_path          = optional(string, null)<br>    config_template_vars = optional(map(any), null)<br>  })</pre> | `{}` | no |
+| project\_id | The project ID that hosts the gke cluster. | `string` | n/a | yes |
 
 ## Outputs
 
