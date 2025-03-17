@@ -52,6 +52,7 @@ Functional examples are included in the
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| additional\_networks | Additional network interface details for GKE, if any. Providing additional networks enables multi networking and creates relevat network objects on the cluster. | <pre>list(object({<br>    network            = string<br>    subnetwork         = string<br>    subnetwork_project = string<br>    network_ip         = string<br>    nic_type           = string<br>    stack_type         = string<br>    queue_count        = number<br>    access_config = list(object({<br>      nat_ip       = string<br>      network_tier = string<br>    }))<br>    ipv6_access_config = list(object({<br>      network_tier = string<br>    }))<br>    alias_ip_range = list(object({<br>      ip_cidr_range         = string<br>      subnetwork_range_name = string<br>    }))<br>  }))</pre> | `[]` | no |
 | apply\_manifests | A list of manifests to apply to GKE cluster using kubectl. For more details see [kubectl module's inputs](kubectl/README.md). | <pre>list(object({<br>    content           = optional(string, null)<br>    source            = optional(string, null)<br>    template_vars     = optional(map(any), null)<br>    server_side_apply = optional(bool, false)<br>    wait_for_rollout  = optional(bool, true)<br>  }))</pre> | `[]` | no |
 | cluster\_id | An identifier for the gke cluster resource with format projects/<project\_id>/locations/<region>/clusters/<name>. | `string` | n/a | yes |
 | jobset | Install [Jobset](https://github.com/kubernetes-sigs/jobset) which manages a group of K8s [jobs](https://kubernetes.io/docs/concepts/workloads/controllers/job/) as a unit. | <pre>object({<br>    install = optional(bool, false)<br>    version = optional(string, "v0.5.2")<br>  })</pre> | `{}` | no |
@@ -60,9 +61,7 @@ Functional examples are included in the
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| bucket\_name | Name of the bucket |
+No outputs.
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 

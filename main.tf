@@ -15,6 +15,23 @@
   */
 
 locals {
+  additional_networks     = flatten([var.additional_networks])
+  apply_manifests = flatten([
+    for idx, network_info in local.additional_networks : [
+      {
+        source = "${path.module}/templates/gke-network-paramset.yaml.tftpl",
+        template_vars = {
+          name            = "vpc${idx + 1}",
+          network_name    = network_info.network
+          subnetwork_name = network_info.subnetwork
+        }
+      },
+      {
+        source        = "${path.module}/templates/network-object.yaml.tftpl",
+        template_vars = { name = "vpc${idx + 1}" }
+      }
+    ]
+  ])
   cluster_id_parts = split("/", var.cluster_id)
   cluster_name     = local.cluster_id_parts[5]
   cluster_location = local.cluster_id_parts[3]
@@ -47,33 +64,18 @@ module "kubectl_apply_manifests" {
   template_vars     = each.value.template_vars
   server_side_apply = each.value.server_side_apply
   wait_for_rollout  = each.value.wait_for_rollout
-
-  providers = {
-    kubectl = kubectl
-    http    = http
-  }
 }
 
 module "install_kueue" {
   source            = "./kubectl"
   source_path       = local.install_kueue ? local.kueue_install_source : null
   server_side_apply = true
-
-  providers = {
-    kubectl = kubectl
-    http    = http
-  }
 }
 
 module "install_jobset" {
   source            = "./kubectl"
   source_path       = local.install_jobset ? local.jobset_install_source : null
   server_side_apply = true
-
-  providers = {
-    kubectl = kubectl
-    http    = http
-  }
 }
 
 module "configure_kueue" {
@@ -84,9 +86,4 @@ module "configure_kueue" {
 
   server_side_apply = true
   wait_for_rollout  = true
-
-  providers = {
-    kubectl = kubectl
-    http    = http
-  }
 }

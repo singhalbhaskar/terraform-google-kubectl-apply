@@ -27,6 +27,9 @@ spec:
   ui:
     input:
       variables:
+        additional_networks:
+          name: additional_networks
+          title: Additional Networks
         apply_manifests:
           name: apply_manifests
           title: Apply Manifests
